@@ -1,0 +1,21 @@
+CREATE ROLE admin_role;
+CREATE ROLE manager_role;
+CREATE ROLE waiter_role;
+
+GRANT ALL PRIVILEGES ON ALL TABLES IN SCHEMA public TO admin_role;
+GRANT SELECT, INSERT, UPDATE ON Menu, Staff, Restaurant_Tables TO manager_role;
+GRANT SELECT, INSERT ON Orders, Order_Items TO waiter_role;
+
+
+CREATE USER admin_user WITH PASSWORD 'admin123';
+GRANT admin_role TO admin_user;
+
+CREATE USER manager_user WITH PASSWORD 'manager123';
+GRANT manager_role TO manager_user;
+
+CREATE USER waiter_user WITH PASSWORD 'waiter123';
+GRANT waiter_role TO waiter_user;
+
+ALTER TABLE Staff OWNER TO admin_role;
+GRANT USAGE, SELECT ON ALL SEQUENCES IN SCHEMA public TO manager_role;
+GRANT USAGE, SELECT ON ALL SEQUENCES IN SCHEMA public TO cashier_role;
