@@ -1,0 +1,55 @@
+CREATE TABLE Staff (
+    staff_id SERIAL PRIMARY KEY,
+    full_name VARCHAR(100),
+    position VARCHAR(50),
+    phone VARCHAR(20)
+);
+
+CREATE TABLE Restaurant_Tables (
+    table_id SERIAL PRIMARY KEY,
+    table_number INT UNIQUE,
+    capacity INT,
+    status VARCHAR(20) DEFAULT 'Бос'
+);
+
+CREATE TABLE Categories (
+    category_id SERIAL PRIMARY KEY,
+    category_name VARCHAR(50)
+);
+
+CREATE TABLE Menu (
+    item_id SERIAL PRIMARY KEY,
+    item_name VARCHAR(100),
+    category_id INT REFERENCES Categories(category_id),
+    price DECIMAL(10, 2)
+);
+
+CREATE TABLE Customers (
+    customer_id SERIAL PRIMARY KEY,
+    name VARCHAR(100),
+    loyalty_points INT DEFAULT 0
+);
+
+CREATE TABLE Orders (
+    order_id SERIAL PRIMARY KEY,
+    table_id INT REFERENCES Restaurant_Tables(table_id),
+    staff_id INT REFERENCES Staff(staff_id),
+    customer_id INT REFERENCES Customers(customer_id),
+    order_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    total_amount DECIMAL(10, 2) DEFAULT 0
+);
+
+CREATE TABLE Order_Items (
+    order_item_id SERIAL PRIMARY KEY,
+    order_id INT REFERENCES Orders(order_id),
+    item_id INT REFERENCES Menu(item_id),
+    quantity INT,
+    subtotal DECIMAL(10, 2)
+);
+
+CREATE TABLE Payments (
+    payment_id SERIAL PRIMARY KEY,
+    order_id INT REFERENCES Orders(order_id),
+    payment_method VARCHAR(50),
+    amount_paid DECIMAL(10, 2)
+);
